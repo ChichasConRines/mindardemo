@@ -5,127 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-
-      #message {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(0, 0, 0, 0.75);
-        color: white;
-        padding: 16px 24px;
-        border-radius: 10px;
-        font-family: sans-serif;
-        font-size: 18px;
-        text-align: center;
-        z-index: 999;
-        transition: opacity 0.5s ease;
-        opacity: 1;
-        pointer-events: none;
-      }
-
-      #message.hidden {
-        opacity: 0;
-      }
-    </style>
   </head>
   <body>
-    <!-- ✅ Mensaje de guía al usuario -->
-    <div id="message">📷 Apunta tu cámara al marcador para comenzar</div>
-
-    <a-scene
-      mindar-image="imageTargetSrc: ./targetsQR.mind; autoStart: true;"
-      color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights"
-      vr-mode-ui="enabled: false"
+    <a-scene 
+      mindar-image="imageTargetSrc: ./targetsQR.mind;" 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false"
-      embedded
     >
       <a-assets>
-        <a-asset-item id="krisModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
-        <a-asset-item id="teddyModel" src="./plastic_teddy_bear.glb"></a-asset-item>
+        <img id="card" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png" />
+        
+        <!-- Modelo para primer target -->
+        <a-asset-item id="avatarModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
+        
+        <!-- Modelo para segundo target -->
+        <a-asset-item id="secondModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
-      <!-- ✅ Cámara con cursor y raycaster para detectar clics -->
-      <a-camera
-        position="0 0 0"
-        look-controls="enabled: false"
-        cursor="rayOrigin: mouse; fuse: false"
-        raycaster="objects: .clickable"
-      ></a-camera>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <!-- Target 0 -->
-      <a-entity mindar-image-target="targetIndex: 0" id="target-entity">
-        <!-- Modelo Kris -->
-        <a-gltf-model
-          id="kris"
-          gltf-model="#krisModel"
-          position="0 0 0.1"
-          scale="0.5 0.5 0.5"
-          visible="true"
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+        <a-gltf-model 
+          rotation="0 0 0" 
+          position="0 0 0.1" 
+          scale="0.5 0.5 0.5" 
+          src="#avatarModel" 
+          animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
         ></a-gltf-model>
+      </a-entity>
 
-        <!-- Modelo Teddy -->
-        <a-gltf-model
-          id="teddy"
-          gltf-model="#teddyModel"
-          position="0 0 0.1"
-          scale="0.5 0.5 0.5"
-          visible="false"
+      <!-- Target 1 -->
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-gltf-model 
+          rotation="0 0 0" 
+          position="0 0 0.1" 
+          scale="0.5 0.5 0.5" 
+          src="#secondModel" 
+          animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
         ></a-gltf-model>
-
-        <!-- ✅ Detectores táctiles -->
-        <a-sphere id="touch-sphere" class="clickable" position="0 0.25 0.1" radius="1" opacity="0" color="#000" transparent="true"></a-sphere>
-        <a-box id="touch-box-large" class="clickable" position="0 0 0.1" scale="2 2 0.1" opacity="0" color="#000" transparent="true"></a-box>
-        <a-box id="touch-box-tall" class="clickable" position="0 0.5 0.1" scale="2 2 1" opacity="0" color="#000" transparent="true"></a-box>
-        <a-plane id="touch-plane" class="clickable" position="0 0 0.05" width="3" height="3" rotation="0 0 0" opacity="0" color="#000" transparent="true"></a-plane>
       </a-entity>
     </a-scene>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const kris = document.querySelector("#kris");
-        const teddy = document.querySelector("#teddy");
-        const targetEntity = document.querySelector("#target-entity");
-        const message = document.querySelector("#message");
-
-        const detectors = [
-          document.querySelector("#touch-sphere"),
-          document.querySelector("#touch-box-large"),
-          document.querySelector("#touch-box-tall"),
-          document.querySelector("#touch-plane")
-        ];
-
-        // ✅ Alterna entre los modelos
-        const toggleModels = () => {
-          const isKrisVisible = kris.getAttribute("visible");
-          kris.setAttribute("visible", !isKrisVisible);
-          teddy.setAttribute("visible", isKrisVisible);
-        };
-
-        // ✅ Escuchar clic en cualquiera de los detectores
-        detectors.forEach((el) => {
-          el.addEventListener("click", () => {
-            toggleModels();
-          });
-        });
-
-        // ✅ Mostrar/Ocultar mensaje cuando se detecta o pierde el target
-        targetEntity.addEventListener("targetFound", () => {
-          message.classList.add("hidden");
-        });
-
-        targetEntity.addEventListener("targetLost", () => {
-          message.classList.remove("hidden");
-        });
-      });
-    </script>
   </body>
 </html>
 
