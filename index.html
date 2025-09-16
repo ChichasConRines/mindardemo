@@ -1,6 +1,6 @@
 
 
-<html>
+<html> 
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
@@ -20,6 +20,7 @@
         <a-asset-item id="teddyModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
+      <!-- Cámara con cursor y raycaster -->
       <a-camera
         position="0 0 0"
         look-controls="enabled: false"
@@ -47,16 +48,16 @@
           visible="false"
         ></a-gltf-model>
 
-        <!-- Caja invisible para detección de toque -->
-        <a-box
-          id="touch-box"
+        <!-- Detector bonito: esfera interactiva -->
+        <a-sphere
+          id="touch-sphere"
           class="clickable"
-          position="0 0 0.1"
-          scale="1 1 0.1"
-          opacity="0"
-          color="#000000"
+          position="0 0.25 0.1"
+          radius="0.75"
+          color="#FFB6C1"         <!-- color pastel bonito (rosa claro) -->
+          opacity="0.35"
           transparent="true"
-        ></a-box>
+        ></a-sphere>
       </a-entity>
     </a-scene>
 
@@ -64,9 +65,9 @@
       document.addEventListener("DOMContentLoaded", () => {
         const kris = document.querySelector("#kris");
         const teddy = document.querySelector("#teddy");
-        const box = document.querySelector("#touch-box");
+        const touchZone = document.querySelector("#touch-sphere");
 
-        box.addEventListener("click", () => {
+        touchZone.addEventListener("click", () => {
           const isKrisVisible = kris.getAttribute("visible");
           kris.setAttribute("visible", !isKrisVisible);
           teddy.setAttribute("visible", isKrisVisible);
@@ -75,7 +76,6 @@
     </script>
   </body>
 </html>
-
 
 
 
