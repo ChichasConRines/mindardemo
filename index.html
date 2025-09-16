@@ -1,74 +1,75 @@
 
 
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-</head>
-<body>
-  <a-scene
-    mindar-image="imageTargetSrc: ./targetsQR.mind;"
-    color-space="sRGB"
-    renderer="colorManagement: true, physicallyCorrectLights"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false"
-  >
-    <a-assets>
-      <a-asset-item id="krisModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
-      <a-asset-item id="teddyModel" src="./plastic_teddy_bear.glb"></a-asset-item>
-    </a-assets>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  </head>
+  <body>
+    <a-scene
+      mindar-image="imageTargetSrc: ./targetsQR.mind;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      embedded
+    >
+      <a-assets>
+        <a-asset-item id="krisModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
+        <a-asset-item id="teddyModel" src="./plastic_teddy_bear.glb"></a-asset-item>
+      </a-assets>
 
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <!-- Cámara con cursor para detectar toques -->
+      <a-camera
+        position="0 0 0"
+        look-controls="enabled: false"
+        cursor="fuse: false; rayOrigin: mouse;"
+        raycaster="objects: .clickable"
+      ></a-camera>
 
-    <!-- Target 0 -->
-    <a-entity mindar-image-target="targetIndex: 0">
-      <!-- Modelo kris visible inicialmente -->
-      <a-gltf-model
-        id="model0_kris"
-        gltf-model="#krisModel"
-        position="0 0 0.1"
-        scale="0.5 0.5 0.5"
-        visible="true"
-      ></a-gltf-model>
+      <!-- Target 0 con dos modelos -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <!-- Kris visible -->
+        <a-gltf-model
+          id="kris"
+          class="clickable"
+          gltf-model="#krisModel"
+          scale="0.5 0.5 0.5"
+          position="0 0 0.1"
+          visible="true"
+        ></a-gltf-model>
 
-      <!-- Modelo teddy oculto inicialmente -->
-      <a-gltf-model
-        id="model0_teddy"
-        gltf-model="#teddyModel"
-        position="0 0 0.1"
-        scale="0.5 0.5 0.5"
-        visible="false"
-      ></a-gltf-model>
-    </a-entity>
+        <!-- Teddy oculto -->
+        <a-gltf-model
+          id="teddy"
+          class="clickable"
+          gltf-model="#teddyModel"
+          scale="0.5 0.5 0.5"
+          position="0 0 0.1"
+          visible="false"
+        ></a-gltf-model>
+      </a-entity>
+    </a-scene>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const kris = document.querySelector("#model0_kris");
-        const teddy = document.querySelector("#model0_teddy");
+        const kris = document.querySelector("#kris");
+        const teddy = document.querySelector("#teddy");
 
-        // Función para alternar visibilidad
-        function toggle() {
-          const krisVisible = kris.getAttribute("visible");
-          kris.setAttribute("visible", !krisVisible);
-          teddy.setAttribute("visible", krisVisible);
-        }
+        const toggle = () => {
+          const showKris = !kris.getAttribute("visible");
+          kris.setAttribute("visible", showKris);
+          teddy.setAttribute("visible", !showKris);
+        };
 
-        // Escuchar eventos táctiles en ambos modelos
-        kris.addEventListener("touchstart", (e) => {
-          e.stopPropagation();
-          toggle();
-        });
-
-        teddy.addEventListener("touchstart", (e) => {
-          e.stopPropagation();
-          toggle();
-        });
+        kris.addEventListener("click", toggle);
+        teddy.addEventListener("click", toggle);
       });
     </script>
-  </a-scene>
-</body>
+  </body>
 </html>
+
 
 
 
