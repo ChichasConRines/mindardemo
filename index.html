@@ -25,52 +25,80 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <!-- Target 0 -->
-      <a-entity mindar-image-target="targetIndex: 0">
+      <a-entity mindar-image-target="targetIndex: 0" id="target0">
         <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+        <!-- Modelo kris visible inicialmente -->
         <a-gltf-model 
-          id="model0"
+          id="model0_kris"
           rotation="0 0 0" 
           position="0 0 0.1" 
           scale="0.5 0.5 0.5" 
           gltf-model="#krisModel" 
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+          visible="true"
         ></a-gltf-model>
-      </a-entity>
-
-      <!-- Target 1 -->
-      <a-entity mindar-image-target="targetIndex: 1">
+        <!-- Modelo teddy invisible inicialmente -->
         <a-gltf-model 
-          id="model1"
+          id="model0_teddy"
           rotation="0 0 0" 
           position="0 0 0.1" 
           scale="0.5 0.5 0.5" 
           gltf-model="#teddyModel" 
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+          visible="false"
+        ></a-gltf-model>
+      </a-entity>
+
+      <!-- Target 1 -->
+      <a-entity mindar-image-target="targetIndex: 1" id="target1">
+        <!-- Modelo teddy visible inicialmente -->
+        <a-gltf-model 
+          id="model1_teddy"
+          rotation="0 0 0" 
+          position="0 0 0.1" 
+          scale="0.5 0.5 0.5" 
+          gltf-model="#teddyModel" 
+          animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+          visible="true"
+        ></a-gltf-model>
+        <!-- Modelo kris invisible inicialmente -->
+        <a-gltf-model 
+          id="model1_kris"
+          rotation="0 0 0" 
+          position="0 0 0.1" 
+          scale="0.5 0.5 0.5" 
+          gltf-model="#krisModel" 
+          animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+          visible="false"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const model0 = document.querySelector('#model0');
-        const model1 = document.querySelector('#model1');
+        // Target 0 modelos
+        const kris0 = document.querySelector('#model0_kris');
+        const teddy0 = document.querySelector('#model0_teddy');
+        // Target 1 modelos
+        const teddy1 = document.querySelector('#model1_teddy');
+        const kris1 = document.querySelector('#model1_kris');
 
-        model0.addEventListener('click', () => {
-          const currentModel = model0.getAttribute('gltf-model');
-          if (currentModel === '#krisModel') {
-            model0.setAttribute('gltf-model', '#teddyModel');
-          } else {
-            model0.setAttribute('gltf-model', '#krisModel');
-          }
+        // Función para alternar visibles
+        function toggleModels(modelA, modelB) {
+          modelA.setAttribute('visible', !modelA.getAttribute('visible'));
+          modelB.setAttribute('visible', !modelB.getAttribute('visible'));
+        }
+
+        // Detectar toque en Target 0 (cualquier modelo visible)
+        const target0 = document.querySelector('#target0');
+        target0.addEventListener('touchstart', () => {
+          toggleModels(kris0, teddy0);
         });
 
-        model1.addEventListener('click', () => {
-          const currentModel = model1.getAttribute('gltf-model');
-          if (currentModel === '#teddyModel') {
-            model1.setAttribute('gltf-model', '#krisModel');
-          } else {
-            model1.setAttribute('gltf-model', '#teddyModel');
-          }
+        // Detectar toque en Target 1
+        const target1 = document.querySelector('#target1');
+        target1.addEventListener('touchstart', () => {
+          toggleModels(teddy1, kris1);
         });
       });
     </script>
