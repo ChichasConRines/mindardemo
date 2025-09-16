@@ -32,7 +32,7 @@
           rotation="0 0 0" 
           position="0 0 0.1" 
           scale="0.5 0.5 0.5" 
-          src="#krisModel" 
+          gltf-model="#krisModel" 
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
         ></a-gltf-model>
       </a-entity>
@@ -44,40 +44,39 @@
           rotation="0 0 0" 
           position="0 0 0.1" 
           scale="0.5 0.5 0.5" 
-          src="#teddyModel" 
+          gltf-model="#teddyModel" 
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
 
     <script>
-      // Esperamos que A-Frame cargue
       document.addEventListener('DOMContentLoaded', () => {
         const model0 = document.querySelector('#model0');
         const model1 = document.querySelector('#model1');
 
-        // Alterna modelos para el target 0
         model0.addEventListener('click', () => {
-          // Si src es krisModel, cambia a teddyModel, y viceversa
-          if (model0.getAttribute('src') === '#krisModel') {
-            model0.setAttribute('src', '#teddyModel');
+          const currentModel = model0.getAttribute('gltf-model');
+          if (currentModel === '#krisModel') {
+            model0.setAttribute('gltf-model', '#teddyModel');
           } else {
-            model0.setAttribute('src', '#krisModel');
+            model0.setAttribute('gltf-model', '#krisModel');
           }
         });
 
-        // Alterna modelos para el target 1
         model1.addEventListener('click', () => {
-          if (model1.getAttribute('src') === '#teddyModel') {
-            model1.setAttribute('src', '#krisModel');
+          const currentModel = model1.getAttribute('gltf-model');
+          if (currentModel === '#teddyModel') {
+            model1.setAttribute('gltf-model', '#krisModel');
           } else {
-            model1.setAttribute('src', '#teddyModel');
+            model1.setAttribute('gltf-model', '#teddyModel');
           }
         });
       });
     </script>
   </body>
 </html>
+
 
 
 
