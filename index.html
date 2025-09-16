@@ -9,27 +9,34 @@
   <body>
     <a-scene mindar-image="imageTargetSrc: ./targetsQR.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
+        <!-- Modelo para targetQ -->
+        <a-asset-item id="avatarModelQ" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
+        <!-- Modelo para targetR -->
+        <a-asset-item id="avatarModelR" src="./plastic_teddy_bear.glb.glb"></a-asset-item>
+        <!-- Imagen para targetQ -->
         <img id="card" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png" />
-        <a-asset-item id="avatarModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <!-- Target Q -->
+      <!-- Target Q (targetIndex: 0) -->
       <a-entity mindar-image-target="targetIndex: 0">
         <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-        <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.5 0.5 0.5" src="#avatarModel" animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
+        <!-- Modelo específico para targetQ -->
+        <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.5 0.5 0.5" src="#avatarModelQ" animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
       </a-entity>
 
-      <!-- Target R -->
+      <!-- Target R (targetIndex: 1) -->
       <a-entity mindar-image-target="targetIndex: 1">
         <a-box position="2 0 0" color="blue" scale="0.5 0.5 0.5"></a-box>
-        <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.5 0.5 0.5" src="#avatarModel" animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
+        <!-- Modelo específico para targetR -->
+        <a-gltf-model rotation="0 0 0" position="0 0 0.1" scale="0.5 0.5 0.5" src="#avatarModelR" animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
       </a-entity>
     </a-scene>
   </body>
 </html>
+
 
 
