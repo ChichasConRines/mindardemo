@@ -1,11 +1,14 @@
 
 
-<html> 
+<html>  
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- A-Frame y MindAR -->
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
+    <!-- Componente personalizado para cambiar el modelo -->
     <script>
       AFRAME.registerComponent('toggle-model', {
         init: function () {
@@ -14,14 +17,19 @@
           const model2 = '#secondModel';
           let currentModel = model1;
 
-          el.addEventListener('click', function () {
+          const switchModel = function () {
             currentModel = (currentModel === model1) ? model2 : model1;
             el.setAttribute('gltf-model', currentModel);
-          });
+          };
+
+          // Escuchar tanto click como touchstart (para móviles)
+          el.addEventListener('click', switchModel);
+          el.addEventListener('touchstart', switchModel);
         }
       });
     </script>
   </head>
+  
   <body>
     <a-scene 
       mindar-image="imageTargetSrc: ./targetsQR.mind;" 
@@ -30,21 +38,34 @@
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false"
     >
+      <!-- Activos (modelos y texturas) -->
       <a-assets>
         <img id="card" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png" />
-        
         <a-asset-item id="avatarModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
         <a-asset-item id="secondModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <!-- Cámara con cursor para detectar clics o toques -->
+      <a-camera 
+        position="0 0 0" 
+        look-controls="enabled: false"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: .clickable"
+      ></a-camera>
 
-      <!-- Target 0 con interacción -->
+      <!-- Target 0 con modelo interactivo -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-        
+        <a-plane 
+          src="#card" 
+          position="0 0 0" 
+          height="0.552" 
+          width="1" 
+          rotation="0 0 0">
+        </a-plane>
+
         <a-gltf-model 
           id="interactive-model"
+          class="clickable"
           toggle-model
           rotation="0 0 0" 
           position="0 0 0.1" 
@@ -54,7 +75,7 @@
         ></a-gltf-model>
       </a-entity>
 
-      <!-- Target 1 sin interacción -->
+      <!-- Target 1 sin interacción (opcional) -->
       <a-entity mindar-image-target="targetIndex: 1">
         <a-gltf-model 
           rotation="0 0 0" 
@@ -67,6 +88,7 @@
     </a-scene>
   </body>
 </html>
+
 
 
 
