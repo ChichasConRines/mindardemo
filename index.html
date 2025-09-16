@@ -19,18 +19,18 @@
           id="card"
           src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png"
         />
-
         <!-- Modelo para primer target -->
         <a-asset-item id="avatarModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
-
         <!-- Modelo para segundo target -->
         <a-asset-item id="secondModel" src="./plastic_teddy_bear.glb"></a-asset-item>
-
         <!-- Nuevo modelo que queremos cargar al hacer clic -->
         <a-asset-item id="groguModel" src="./grogu_minecraft.glb"></a-asset-item>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-camera position="0 0 0" look-controls="enabled: false">
+        <!-- Cursor para interactuar con los modelos -->
+        <a-cursor fuse="false" color="#FF0000" ></a-cursor>
+      </a-camera>
 
       <!-- Target 0 -->
       <a-entity mindar-image-target="targetIndex: 0">
@@ -50,7 +50,9 @@
           scale="0.5 0.5 0.5"
           src="#avatarModel"
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
-          touchstart="changeModel(event, '#groguModel')"
+          event-set__mouseenter="scale: 1.1 1.1 1.1"
+          event-set__mouseleave="scale: 1 1 1"
+          event-set__click="src: #groguModel" <!-- Cambio al modelo de Grogu -->
         ></a-gltf-model>
       </a-entity>
 
@@ -64,23 +66,15 @@
           scale="0.5 0.5 0.5"
           src="#secondModel"
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
-          touchstart="changeModel(event, '#groguModel')"
+          event-set__mouseenter="scale: 1.1 1.1 1.1"
+          event-set__mouseleave="scale: 1 1 1"
+          event-set__click="src: #groguModel" <!-- Cambio al modelo de Grogu -->
         ></a-gltf-model>
       </a-entity>
     </a-scene>
-
-    <script>
-      // Función que cambia el modelo al tocar
-      function changeModel(event, newModelSrc) {
-        const target = event.target; // El objeto tocado
-        const newModel = document.querySelector(newModelSrc); // El modelo nuevo a cargar
-
-        // Cambiar el modelo (la fuente del modelo 3D)
-        target.setAttribute('src', newModel.getAttribute('src'));
-      }
-    </script>
   </body>
 </html>
+
 
 
 
