@@ -28,8 +28,8 @@
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false">
-        <!-- Cursor para interactuar con los modelos -->
-        <a-cursor fuse="false" color="#FF0000" ></a-cursor>
+        <!-- Añadir cursor con raycaster -->
+        <a-cursor raycaster="objects: .clickable" color="#FF0000" ></a-cursor>
       </a-camera>
 
       <!-- Target 0 -->
@@ -44,14 +44,13 @@
 
         <!-- Modelo específico para el primer target -->
         <a-gltf-model
+          class="clickable"
           id="model0"
           rotation="0 0 0"
           position="0 0 0.1"
           scale="0.5 0.5 0.5"
           src="#avatarModel"
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
-          event-set__mouseenter="scale: 1.1 1.1 1.1"
-          event-set__mouseleave="scale: 1 1 1"
           event-set__click="src: #groguModel" <!-- Cambio al modelo de Grogu -->
         ></a-gltf-model>
       </a-entity>
@@ -60,20 +59,20 @@
       <a-entity mindar-image-target="targetIndex: 1">
         <!-- Modelo específico para el segundo target -->
         <a-gltf-model
+          class="clickable"
           id="model1"
           rotation="0 0 0"
           position="0 0 0.1"
           scale="0.5 0.5 0.5"
           src="#secondModel"
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
-          event-set__mouseenter="scale: 1.1 1.1 1.1"
-          event-set__mouseleave="scale: 1 1 1"
           event-set__click="src: #groguModel" <!-- Cambio al modelo de Grogu -->
         ></a-gltf-model>
       </a-entity>
     </a-scene>
   </body>
 </html>
+
 
 
 
