@@ -20,35 +20,43 @@
         <a-asset-item id="teddyModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
-      <!-- Cámara con cursor para detectar toques -->
       <a-camera
         position="0 0 0"
         look-controls="enabled: false"
-        cursor="fuse: false; rayOrigin: mouse;"
+        cursor="rayOrigin: mouse"
         raycaster="objects: .clickable"
       ></a-camera>
 
-      <!-- Target 0 con dos modelos -->
+      <!-- Target 0 -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Kris visible -->
+        <!-- Modelo Kris (visible al inicio) -->
         <a-gltf-model
           id="kris"
-          class="clickable"
           gltf-model="#krisModel"
-          scale="0.5 0.5 0.5"
           position="0 0 0.1"
+          scale="0.5 0.5 0.5"
           visible="true"
         ></a-gltf-model>
 
-        <!-- Teddy oculto -->
+        <!-- Modelo Teddy (invisible al inicio) -->
         <a-gltf-model
           id="teddy"
-          class="clickable"
           gltf-model="#teddyModel"
-          scale="0.5 0.5 0.5"
           position="0 0 0.1"
+          scale="0.5 0.5 0.5"
           visible="false"
         ></a-gltf-model>
+
+        <!-- Caja invisible para detección de toque -->
+        <a-box
+          id="touch-box"
+          class="clickable"
+          position="0 0 0.1"
+          scale="1 1 0.1"
+          opacity="0"
+          color="#000000"
+          transparent="true"
+        ></a-box>
       </a-entity>
     </a-scene>
 
@@ -56,19 +64,18 @@
       document.addEventListener("DOMContentLoaded", () => {
         const kris = document.querySelector("#kris");
         const teddy = document.querySelector("#teddy");
+        const box = document.querySelector("#touch-box");
 
-        const toggle = () => {
-          const showKris = !kris.getAttribute("visible");
-          kris.setAttribute("visible", showKris);
-          teddy.setAttribute("visible", !showKris);
-        };
-
-        kris.addEventListener("click", toggle);
-        teddy.addEventListener("click", toggle);
+        box.addEventListener("click", () => {
+          const isKrisVisible = kris.getAttribute("visible");
+          kris.setAttribute("visible", !isKrisVisible);
+          teddy.setAttribute("visible", isKrisVisible);
+        });
       });
     </script>
   </body>
 </html>
+
 
 
 
