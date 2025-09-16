@@ -6,29 +6,37 @@
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
       #message {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.75);
         color: white;
-        padding: 20px 30px;
+        padding: 16px 24px;
         border-radius: 10px;
         font-family: sans-serif;
         font-size: 18px;
         text-align: center;
         z-index: 999;
         transition: opacity 0.5s ease;
+        opacity: 1;
+        pointer-events: none;
       }
+
       #message.hidden {
         opacity: 0;
-        pointer-events: none;
       }
     </style>
   </head>
   <body>
-    <!-- ✅ Mensaje inicial -->
+    <!-- ✅ Mensaje de guía al usuario -->
     <div id="message">📷 Apunta tu cámara al marcador para comenzar</div>
 
     <a-scene
@@ -44,16 +52,17 @@
         <a-asset-item id="teddyModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
+      <!-- ✅ Cámara con cursor y raycaster para detectar clics -->
       <a-camera
         position="0 0 0"
         look-controls="enabled: false"
-        cursor="rayOrigin: mouse"
+        cursor="rayOrigin: mouse; fuse: false"
         raycaster="objects: .clickable"
       ></a-camera>
 
-      <!-- ✅ Target 0 con modelos y detectores -->
+      <!-- Target 0 -->
       <a-entity mindar-image-target="targetIndex: 0" id="target-entity">
-        <!-- Modelos -->
+        <!-- Modelo Kris -->
         <a-gltf-model
           id="kris"
           gltf-model="#krisModel"
@@ -62,6 +71,7 @@
           visible="true"
         ></a-gltf-model>
 
+        <!-- Modelo Teddy -->
         <a-gltf-model
           id="teddy"
           gltf-model="#teddyModel"
@@ -70,11 +80,11 @@
           visible="false"
         ></a-gltf-model>
 
-        <!-- Detectores -->
-        <a-sphere id="touch-sphere" class="clickable" position="0 0.25 0.1" radius="1" color="#000" opacity="0" transparent="true"></a-sphere>
-        <a-box id="touch-box-large" class="clickable" position="0 0 0.1" scale="2 2 0.1" color="#000" opacity="0" transparent="true"></a-box>
-        <a-box id="touch-box-tall" class="clickable" position="0 0.5 0.1" scale="2 2 1" color="#000" opacity="0" transparent="true"></a-box>
-        <a-plane id="touch-plane" class="clickable" position="0 0 0.05" rotation="0 0 0" width="3" height="3" color="#000" opacity="0" transparent="true"></a-plane>
+        <!-- ✅ Detectores táctiles -->
+        <a-sphere id="touch-sphere" class="clickable" position="0 0.25 0.1" radius="1" opacity="0" color="#000" transparent="true"></a-sphere>
+        <a-box id="touch-box-large" class="clickable" position="0 0 0.1" scale="2 2 0.1" opacity="0" color="#000" transparent="true"></a-box>
+        <a-box id="touch-box-tall" class="clickable" position="0 0.5 0.1" scale="2 2 1" opacity="0" color="#000" transparent="true"></a-box>
+        <a-plane id="touch-plane" class="clickable" position="0 0 0.05" width="3" height="3" rotation="0 0 0" opacity="0" color="#000" transparent="true"></a-plane>
       </a-entity>
     </a-scene>
 
@@ -92,22 +102,25 @@
           document.querySelector("#touch-plane")
         ];
 
+        // ✅ Alterna entre los modelos
         const toggleModels = () => {
-          const showKris = !kris.getAttribute("visible");
-          kris.setAttribute("visible", showKris);
-          teddy.setAttribute("visible", !showKris);
+          const isKrisVisible = kris.getAttribute("visible");
+          kris.setAttribute("visible", !isKrisVisible);
+          teddy.setAttribute("visible", isKrisVisible);
         };
 
+        // ✅ Escuchar clic en cualquiera de los detectores
         detectors.forEach((el) => {
-          el.addEventListener("click", toggleModels);
+          el.addEventListener("click", () => {
+            toggleModels();
+          });
         });
 
-        // ✅ Oculta el mensaje cuando se detecta el target
+        // ✅ Mostrar/Ocultar mensaje cuando se detecta o pierde el target
         targetEntity.addEventListener("targetFound", () => {
           message.classList.add("hidden");
         });
 
-        // (Opcional) Muestra el mensaje de nuevo si se pierde el target
         targetEntity.addEventListener("targetLost", () => {
           message.classList.remove("hidden");
         });
@@ -115,6 +128,7 @@
     </script>
   </body>
 </html>
+
 
 
 
