@@ -1,11 +1,13 @@
 
 
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <title>MindAR Demo Toggle Model</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
     <script>
       AFRAME.registerComponent("toggle-model", {
         init: function () {
@@ -14,17 +16,23 @@
           const model2 = "#secondModel";
           let currentModel = model1;
 
+          // Verificar que se inicializa
+          console.log("toggle-model init on element:", el);
+
           const switchModel = function () {
+            console.log("switchModel called. currentModel:", currentModel);
             currentModel = currentModel === model1 ? model2 : model1;
+            console.log("Changing model to:", currentModel);
             el.setAttribute("gltf-model", currentModel);
           };
 
+          // Escuchar click y touchstart
           el.addEventListener("click", switchModel);
-        },
+          el.addEventListener("touchstart", switchModel);
+        }
       });
     </script>
   </head>
-
   <body>
     <a-scene
       mindar-image="imageTargetSrc: ./targetsQR.mind;"
@@ -35,15 +43,13 @@
       embedded
     >
       <a-assets>
-        <img
-          id="card"
-          src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png"
-        />
+        <img id="card"
+          src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png" />
         <a-asset-item id="avatarModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
         <a-asset-item id="secondModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
-      <!-- Cámara con cursor centrado -->
+      <!-- Cámara con cursor visible centrado -->
       <a-camera
         position="0 0 0"
         look-controls="enabled: false"
@@ -52,8 +58,8 @@
         <a-cursor
           fuse="false"
           rayOrigin="cursor"
-          material="color: white; shader: flat"
-          geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01"
+          material="color: yellow; shader: flat"
+          geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
         ></a-cursor>
       </a-camera>
 
@@ -78,7 +84,7 @@
         ></a-gltf-model>
       </a-entity>
 
-      <!-- Target 1 (opcional, sin interacción) -->
+      <!-- Target 1 -->
       <a-entity mindar-image-target="targetIndex: 1">
         <a-gltf-model
           rotation="0 0 0"
@@ -88,6 +94,7 @@
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
         ></a-gltf-model>
       </a-entity>
+
     </a-scene>
   </body>
 </html>
