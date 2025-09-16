@@ -3,11 +3,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>MindAR Demo Toggle Model</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      a-scene {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+
     <script>
       AFRAME.registerComponent("toggle-model", {
         init: function () {
@@ -29,7 +47,7 @@
           // Escuchar click y touchstart
           el.addEventListener("click", switchModel);
           el.addEventListener("touchstart", switchModel);
-        }
+        },
       });
     </script>
   </head>
@@ -43,18 +61,19 @@
       embedded
     >
       <a-assets>
-        <img id="card"
-          src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png" />
-        <a-asset-item id="avatarModel" src="./kris_light_world_form_-_deltarune.glb"></a-asset-item>
+        <img
+          id="card"
+          src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png"
+        />
+        <a-asset-item
+          id="avatarModel"
+          src="./kris_light_world_form_-_deltarune.glb"
+        ></a-asset-item>
         <a-asset-item id="secondModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
       <!-- Cámara con cursor visible centrado -->
-      <a-camera
-        position="0 0 0"
-        look-controls="enabled: false"
-        raycaster="objects: .clickable"
-      >
+      <a-camera position="0 0 0" look-controls="enabled: false" raycaster="objects: .clickable">
         <a-cursor
           fuse="false"
           rayOrigin="cursor"
@@ -94,10 +113,10 @@
           animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
         ></a-gltf-model>
       </a-entity>
-
     </a-scene>
   </body>
 </html>
+
 
 
 
