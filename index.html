@@ -19,7 +19,6 @@
             el.setAttribute("gltf-model", currentModel);
           };
 
-          // Escucha eventos de cursor (funciona en móvil)
           el.addEventListener("click", switchModel);
         },
       });
@@ -44,13 +43,19 @@
         <a-asset-item id="secondModel" src="./plastic_teddy_bear.glb"></a-asset-item>
       </a-assets>
 
-      <!-- Cámara + cursor -->
+      <!-- Cámara con cursor centrado -->
       <a-camera
         position="0 0 0"
         look-controls="enabled: false"
         raycaster="objects: .clickable"
-        cursor="fuse: true; rayOrigin: mouse;"
-      ></a-camera>
+      >
+        <a-cursor
+          fuse="false"
+          rayOrigin="cursor"
+          material="color: white; shader: flat"
+          geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01"
+        ></a-cursor>
+      </a-camera>
 
       <!-- Target 0 con modelo interactivo -->
       <a-entity mindar-image-target="targetIndex: 0">
@@ -73,7 +78,7 @@
         ></a-gltf-model>
       </a-entity>
 
-      <!-- Target 1 (sin interacción) -->
+      <!-- Target 1 (opcional, sin interacción) -->
       <a-entity mindar-image-target="targetIndex: 1">
         <a-gltf-model
           rotation="0 0 0"
