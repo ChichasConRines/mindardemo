@@ -28,7 +28,7 @@
         raycaster="objects: .clickable"
       ></a-camera>
 
-      <!-- Target 0 -->
+      <!-- Target 0 con modelos y múltiples detectores táctiles -->
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- Modelo Kris (visible al inicio) -->
         <a-gltf-model
@@ -48,16 +48,51 @@
           visible="false"
         ></a-gltf-model>
 
-        <!-- Detector bonito: esfera interactiva -->
+        <!-- 🟠 Detector 1: esfera (zona táctil esférica invisible) -->
         <a-sphere
           id="touch-sphere"
           class="clickable"
           position="0 0.25 0.1"
-          radius="0.75"
-          color="#FFB6C1"         <!-- color pastel bonito (rosa claro) -->
-          opacity="0.35"
+          radius="1"
+          color="#000"
+          opacity="0"
           transparent="true"
         ></a-sphere>
+
+        <!-- 🟡 Detector 2: caja grande (zona amplia en XY) -->
+        <a-box
+          id="touch-box-large"
+          class="clickable"
+          position="0 0 0.1"
+          scale="2 2 0.1"
+          color="#000"
+          opacity="0"
+          transparent="true"
+        ></a-box>
+
+        <!-- 🔵 Detector 3: caja alta (zona amplia en altura) -->
+        <a-box
+          id="touch-box-tall"
+          class="clickable"
+          position="0 0.5 0.1"
+          scale="2 2 1"
+          color="#000"
+          opacity="0"
+          transparent="true"
+        ></a-box>
+
+        <!-- 🟢 Detector 4: plano gigante (zona táctil en toda el área del target) -->
+        <a-plane
+          id="touch-plane"
+          class="clickable"
+          position="0 0 0.05"
+          rotation="0 0 0"
+          width="3"
+          height="3"
+          color="#000"
+          opacity="0"
+          transparent="true"
+        ></a-plane>
       </a-entity>
     </a-scene>
 
@@ -65,12 +100,23 @@
       document.addEventListener("DOMContentLoaded", () => {
         const kris = document.querySelector("#kris");
         const teddy = document.querySelector("#teddy");
-        const touchZone = document.querySelector("#touch-sphere");
 
-        touchZone.addEventListener("click", () => {
-          const isKrisVisible = kris.getAttribute("visible");
-          kris.setAttribute("visible", !isKrisVisible);
-          teddy.setAttribute("visible", isKrisVisible);
+        // Detectores
+        const detectors = [
+          document.querySelector("#touch-sphere"),
+          document.querySelector("#touch-box-large"),
+          document.querySelector("#touch-box-tall"),
+          document.querySelector("#touch-plane")
+        ];
+
+        const toggleModels = () => {
+          const showKris = !kris.getAttribute("visible");
+          kris.setAttribute("visible", showKris);
+          teddy.setAttribute("visible", !showKris);
+        };
+
+        detectors.forEach((el) => {
+          el.addEventListener("click", toggleModels);
         });
       });
     </script>
